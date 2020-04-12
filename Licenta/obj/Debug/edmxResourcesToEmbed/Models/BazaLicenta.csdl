@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BazaLicentaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Categorie">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Nume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Echipamentes" Relationship="Self.FK_Echipamente_Categorie" FromRole="Categorie" ToRole="Echipamente" />
+  </EntityType>
+  <EntityType Name="Echipamente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Nume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CategorieId" Type="Int32" Nullable="false" />
+    <Property Name="Marime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descriere" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Pret" Type="Decimal" Precision="8" Scale="2" Nullable="false" />
+    <Property Name="UnitId" Type="Int32" Nullable="false" />
+    <Property Name="In_Stoc" Type="Byte" Nullable="false" />
+    <NavigationProperty Name="Categorie" Relationship="Self.FK_Echipamente_Categorie" FromRole="Echipamente" ToRole="Categorie" />
+    <NavigationProperty Name="Unitate" Relationship="Self.FK_Echipamente_Unitate" FromRole="Echipamente" ToRole="Unitate" />
+  </EntityType>
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Nume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="UserAccounts" Relationship="Self.FK_UserAccount_Rol" FromRole="Rol" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="Unitate">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Nume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Echipamentes" Relationship="Self.FK_Echipamente_Unitate" FromRole="Unitate" ToRole="Echipamente" />
+  </EntityType>
+  <EntityType Name="UserAccount">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Parola" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Telefon" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdRol" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Rol" Relationship="Self.FK_UserAccount_Rol" FromRole="UserAccount" ToRole="Rol" />
+  </EntityType>
+  <Association Name="FK_Echipamente_Categorie">
+    <End Role="Categorie" Type="Self.Categorie" Multiplicity="1" />
+    <End Role="Echipamente" Type="Self.Echipamente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categorie">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Echipamente">
+        <PropertyRef Name="CategorieId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Echipamente_Unitate">
+    <End Role="Unitate" Type="Self.Unitate" Multiplicity="1" />
+    <End Role="Echipamente" Type="Self.Echipamente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Unitate">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Echipamente">
+        <PropertyRef Name="UnitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserAccount_Rol">
+    <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserAccount">
+        <PropertyRef Name="IdRol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BazaLicentaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Categorie" />
+    <EntitySet Name="Echipamentes" EntityType="Self.Echipamente" />
+    <EntitySet Name="Rols" EntityType="Self.Rol" />
+    <EntitySet Name="Unitates" EntityType="Self.Unitate" />
+    <EntitySet Name="UserAccounts" EntityType="Self.UserAccount" />
+    <AssociationSet Name="FK_Echipamente_Categorie" Association="Self.FK_Echipamente_Categorie">
+      <End Role="Categorie" EntitySet="Categories" />
+      <End Role="Echipamente" EntitySet="Echipamentes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Echipamente_Unitate" Association="Self.FK_Echipamente_Unitate">
+      <End Role="Unitate" EntitySet="Unitates" />
+      <End Role="Echipamente" EntitySet="Echipamentes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserAccount_Rol" Association="Self.FK_UserAccount_Rol">
+      <End Role="Rol" EntitySet="Rols" />
+      <End Role="UserAccount" EntitySet="UserAccounts" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

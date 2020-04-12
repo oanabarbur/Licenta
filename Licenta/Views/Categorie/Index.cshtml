@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Licenta.Models.Categorie>
+@{
+    ViewBag.Title = "Categorie";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Categorie</h2>
+ @if (!Model.Any())
+{
+    <p>Nu exista categorie</p>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Categorie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categorie in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(categorie.Nume, "Detalii", "Categorie", new { id = categorie.Id}, null)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
